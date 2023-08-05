@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/Jordation/jsonl/internal/types"
-	riotTypes "github.com/Jordation/jsonl/provider/provider"
+	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/sirupsen/logrus"
 )
 

@@ -3,7 +3,7 @@ package provider
 import (
 	"time"
 
-	riotTypes "github.com/Jordation/jsonl/provider/provider"
+	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/Jordation/jsonl/utils"
 )
 

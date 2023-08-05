@@ -5,7 +5,7 @@ import (
 	"math"
 
 	"github.com/Jordation/jsonl/internal/pluck"
-	riotTypes "github.com/Jordation/jsonl/provider/provider"
+	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/disintegration/imaging"
 	"github.com/sirupsen/logrus"
 )

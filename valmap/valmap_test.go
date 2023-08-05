@@ -7,7 +7,7 @@ import (
 
 	"github.com/Jordation/jsonl/internal/pluck"
 	"github.com/Jordation/jsonl/provider"
-	riotTypes "github.com/Jordation/jsonl/provider/provider"
+	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/Jordation/jsonl/utils"
 	"github.com/disintegration/imaging"
 )

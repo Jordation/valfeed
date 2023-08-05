@@ -1,7 +1,7 @@
 package pluck
 
 import (
-	riotTypes "github.com/Jordation/jsonl/provider/provider"
+	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/jinzhu/copier"
 )
 

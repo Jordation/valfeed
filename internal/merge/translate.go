@@ -5,7 +5,7 @@ import (
 
 	"github.com/Jordation/jsonl/internal/pluck"
 	"github.com/Jordation/jsonl/internal/types"
-	riotTypes "github.com/Jordation/jsonl/provider/provider"
+	riotTypes "github.com/Jordation/jsonl/provider/types"
 )
 
 func TranslateMatchData(events []*riotTypes.Event) (*types.Map, error) {

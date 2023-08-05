@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	riotType "github.com/Jordation/jsonl/provider/provider"
+	riotType "github.com/Jordation/jsonl/provider/types"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/sirupsen/logrus"
 )
