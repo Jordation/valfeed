@@ -1,0 +1,280 @@
+{
+    "configuration": {
+        "players": [
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "6dcf8ac6-2506-5758-b5e8-fd721bf58945"
+                },
+                "displayName": "WH Bonobo",
+                "playerId": {
+                    "value": 1
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "5F8D3A7F-467B-97F3-062C-13ACF203C006"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "78b2a102-d522-5790-a078-2202cf03ea3f"
+                },
+                "displayName": "WH Zauqk",
+                "playerId": {
+                    "value": 2
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "E370FA57-4757-3604-3648-499E1F642D3F"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "b213cd14-192f-50c7-a65b-74bebee0d3f0"
+                },
+                "displayName": "WH MirzAA",
+                "playerId": {
+                    "value": 3
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "1E58DE9C-4950-5125-93E9-A0AEE9F98746"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "564fcc09-bb89-5b9a-9481-ff7dbdc9fe40"
+                },
+                "displayName": "WH Gloom",
+                "playerId": {
+                    "value": 4
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "8E253930-4C05-31DD-1B6C-968525494517"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "f7e41300-fd90-5858-a04c-9a83c2b22082"
+                },
+                "displayName": "WH Vizsla",
+                "playerId": {
+                    "value": 5
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "22697A3D-45BF-8DD7-4FEC-84A9E28C69D7"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "033766b7-5384-5296-b2fe-0bd2ffbe288c"
+                },
+                "displayName": "NERD FETA73",
+                "playerId": {
+                    "value": 6
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "BB2A4828-46EB-8CD1-E765-15848195D751"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "4db45558-450a-5300-b7d2-d4449e73c201"
+                },
+                "displayName": "NERD BiggieChees",
+                "playerId": {
+                    "value": 7
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "8E253930-4C05-31DD-1B6C-968525494517"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "2b74ae05-ec07-5a07-a934-80227e10683e"
+                },
+                "displayName": "NERD McKinley",
+                "playerId": {
+                    "value": 8
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "6F2A04CA-43E0-BE17-7F36-B3908627744D"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "17475059-2b11-5be9-82ba-2f38e7d4725a"
+                },
+                "displayName": "NERD Sinaway",
+                "playerId": {
+                    "value": 9
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "1E58DE9C-4950-5125-93E9-A0AEE9F98746"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            },
+            {
+                "accountId": {
+                    "type": "RIOT_ID",
+                    "value": "e72fdd10-524e-5811-aa37-d914bcbaf403"
+                },
+                "displayName": "NERD MILKY1",
+                "playerId": {
+                    "value": 10
+                },
+                "selectedAgent": {
+                    "fallback": {
+                        "displayName": "",
+                        "guid": "707EAB51-4836-F488-046A-CDA6BF494859"
+                    },
+                    "type": "UNKNOWN"
+                },
+                "tagLine": "eProd",
+                "type": "HUMAN"
+            }
+        ],
+        "selectedMap": {
+            "fallback": {
+                "displayName": "Jam",
+                "guid": "/Game/Maps/Jam/Jam"
+            },
+            "id": "UNKNOWN"
+        },
+        "spikeMode": {
+            "attackingTeam": {
+                "value": 11
+            },
+            "completedRounds": [],
+            "currentRound": 1,
+            "defendingTeam": {
+                "value": 12
+            },
+            "roundsToWin": 13
+        },
+        "teams": [
+            {
+                "name": "Red",
+                "playersInTeam": [
+                    {
+                        "value": 6
+                    },
+                    {
+                        "value": 7
+                    },
+                    {
+                        "value": 8
+                    },
+                    {
+                        "value": 9
+                    },
+                    {
+                        "value": 10
+                    }
+                ],
+                "teamId": {
+                    "value": 11
+                }
+            },
+            {
+                "name": "Blue",
+                "playersInTeam": [
+                    {
+                        "value": 1
+                    },
+                    {
+                        "value": 2
+                    },
+                    {
+                        "value": 3
+                    },
+                    {
+                        "value": 4
+                    },
+                    {
+                        "value": 5
+                    }
+                ],
+                "teamId": {
+                    "value": 12
+                }
+            }
+        ]
+    },
+    "metadata": {
+        "eventTime": {
+            "includedPauses": "0.070s",
+            "omittingPauses": "0.070s"
+        },
+        "gameId": {
+            "value": "b42cc45b-c0e9-465c-9f21-a48d7b9da8ac"
+        },
+        "gameVersion": "06.08.00.879813",
+        "playback": 0,
+        "sequenceNumber": 1,
+        "serverInfo": {
+            "processId": "",
+            "rfc190Scope": "aresriot.aws-apse2-prod.tournament-gp-sydney-1.ares.gameserver"
+        },
+        "stage": 1,
+        "wallTime": "2023-05-25T11:43:44.114Z"
+    }
+}
