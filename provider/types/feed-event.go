@@ -1,13 +1,37 @@
 package types
 
+const (
+	ROUND_START = "ROUND_STARTING"
+	PLAY_START  = "IN_ROUND"
+	ROUND_END   = "ROUND_ENDING"
+)
+
 type Event struct {
-	InventoryTransaction *InventoryTransaction `json:"inventoryTransaction,omitempty"`
-	Metadata             *Metadata             `json:"metadata,omitempty"`
-	Snapshot             *Snapshot             `json:"snapshot,omitempty"`
-	RoundStarted         *RoundStarted         `json:"roundStarted,omitempty"`
 	Configuration        *GameConfig           `json:"configuration,omitempty"`
 	DamageEvent          *DamageEvent          `json:"damageEvent,omitempty"`
+	InventoryTransaction *InventoryTransaction `json:"inventoryTransaction,omitempty"`
+	GamePhase            *GamePhase            `json:"gamePhase,omitempty"`
+	RoundStarted         *RoundStarted         `json:"roundStarted,omitempty"`
+	RoundDecided         *RoundDecided         `json:"roundDecided,omitempty"`
+	Snapshot             *Snapshot             `json:"snapshot,omitempty"`
+	Metadata             *Metadata             `json:"metadata,omitempty"`
 }
+
+type GamePhase struct {
+	Phase       string `json:"phase,omitempty"`
+	RoundNumber int    `json:"roundNumber,omitempty"`
+}
+
+type Result struct {
+	RoundNumber     int              `json:"roundNumber,omitempty"`
+	SpikeModeResult *SpikeModeResult `json:"spikeModeResult,omitempty"`
+	WinningTeam     *WinningTeam     `json:"winningTeam,omitempty"`
+}
+
+type RoundDecided struct {
+	Result Result `json:"result,omitempty"`
+}
+
 type InventoryTransaction struct {
 	TransactionType string `json:"transactionType,omitempty"`
 

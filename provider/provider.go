@@ -33,8 +33,13 @@ func (f *ValFeed) Connect() chan *riotTypes.Event {
 }
 
 func (f *ValFeed) streamEvents(c chan *riotTypes.Event) {
-	for event, err := f.Pump.GetDelta(); err == nil; {
-		c <- event
-		time.Sleep(time.Second * 1)
+	for {
+		evt, err := f.Pump.GetDelta()
+		if err != nil {
+			break
+		}
+
+		c <- evt
+		time.Sleep(time.Second / 5)
 	}
 }

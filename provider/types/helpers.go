@@ -4,3 +4,5 @@ func (p *Position) TransformWithMapData(xmulti, xscalaradd, ymulti, yscalaradd f
 	p.X = p.X * (xmulti * xscalaradd) * 1000
 	p.Y = p.Y * (ymulti * yscalaradd) * 1000
 }
+
+//func (Round)
