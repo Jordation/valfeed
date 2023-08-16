@@ -1,6 +1,6 @@
 module github.com/Jordation/jsonl
 
-go 1.20
+go 1.21
 
 require (
 	github.com/davecgh/go-spew v1.1.1
@@ -8,6 +8,8 @@ require (
 )
 
 require github.com/jinzhu/copier v0.3.5
+
+require github.com/gorilla/mux v1.8.0 // indirect
 
 require (
 	github.com/disintegration/imaging v1.6.2

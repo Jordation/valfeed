@@ -8,7 +8,7 @@ import (
 )
 
 type Feed interface {
-	Connect() chan *riotTypes.Event
+	Stream() chan *riotTypes.Event
 }
 
 type ValFeed struct {
@@ -26,7 +26,7 @@ func NewFeed() (Feed, error) {
 	}, nil
 }
 
-func (f *ValFeed) Connect() chan *riotTypes.Event {
+func (f *ValFeed) Stream() chan *riotTypes.Event {
 	c := make(chan *riotTypes.Event)
 	go f.streamEvents(c)
 	return c
@@ -40,6 +40,6 @@ func (f *ValFeed) streamEvents(c chan *riotTypes.Event) {
 		}
 
 		c <- evt
-		time.Sleep(time.Second / 5)
+		time.Sleep(time.Millisecond * 50)
 	}
 }
