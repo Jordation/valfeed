@@ -304,3 +304,23 @@ func (p *PlayerInGame) GetPlayerID() *PlayerID {
 	}
 	return &PlayerID{}
 }
+
+func (gc *GameConfig) GetMappings() (map[int]string, map[int]int, map[int]string) {
+	playerMap := make(map[int]string, 10)
+	playerToTeamMap := make(map[int]int, 10)
+	sideStartMap := make(map[int]string, 2)
+
+	for _, player := range gc.Players {
+		playerMap[player.PlayerID.Value] = player.DisplayName
+	}
+
+	for _, team := range gc.Teams {
+		for _, player := range team.PlayersInTeam {
+			playerToTeamMap[player.Value] = team.TeamID.Value
+		}
+	}
+
+	sideStartMap[gc.SpikeMode.AttackingTeam.Value] = "atk"
+	sideStartMap[gc.SpikeMode.DefendingTeam.Value] = "def"
+	return playerMap, playerToTeamMap, sideStartMap
+}

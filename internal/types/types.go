@@ -1,33 +1,33 @@
 package types
 
 var DamageEventMap = map[DamageEventType]string{
-	Died:        "died",
-	Killed:      "killed",
-	TookDamage:  "took damage",
-	DealtDamage: "dealt damage",
+	Killed: "killed",
+	Shot:   "shot",
 }
 
 type DamageEventType int
 
 const (
-	Died DamageEventType = iota
-	Killed
-	TookDamage
-	DealtDamage
+	Killed DamageEventType = iota
+	Shot
 )
 
-type DamageEvent struct {
+type CombatEvent struct {
+	ID          string
 	Type        DamageEventType
 	Causer      string
 	Victim      string
 	DmgLoc      string
-	DmgDone     float64
+	DmgOnHit    float64
+	RawDmg      float64
+	Wallbang    bool
 	DetailStr   string
 	SequenceNum int
 	Weapon      string
 }
 
 type RoundEvent struct {
+	ID          string
 	RoundNumber int
 	SeqInfo     *RoundData
 	Winner      int
@@ -46,4 +46,20 @@ type RoundMeta struct {
 }
 
 type MatchState struct {
+	Rounds []*RoundState
+}
+
+type RoundState struct {
+	Winner    int
+	Finished  bool
+	WinReason string
+	Players   []*PlayerState
+	Events    []interface{}
+}
+
+type PlayerState struct {
+	ID     int
+	Kills  int
+	Died   bool
+	Weapon string
 }

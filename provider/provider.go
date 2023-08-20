@@ -34,12 +34,14 @@ func (f *ValFeed) Stream() chan *riotTypes.Event {
 
 func (f *ValFeed) streamEvents(c chan *riotTypes.Event) {
 	for {
-		evt, err := f.Pump.GetDelta()
-		if err != nil {
-			break
+		for i := 0; i < 250; i++ {
+			evt, err := f.Pump.GetDelta()
+			if err != nil {
+				break
+			}
+			c <- evt
 		}
 
-		c <- evt
-		time.Sleep(time.Millisecond * 50)
+		time.Sleep(time.Second)
 	}
 }

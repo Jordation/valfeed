@@ -1,88 +1,88 @@
 package translate
 
 import (
+	"github.com/Jordation/jsonl/internal/distributor"
+	"github.com/Jordation/jsonl/internal/persistance"
 	"github.com/Jordation/jsonl/internal/types"
 	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/Jordation/jsonl/utils"
-	"github.com/sirupsen/logrus"
 )
 
 type Translatorer interface {
 	HandleEvent(event *riotTypes.Event)
 }
 
-// TODO impl manager
-type manager struct {
+// TODO impl TranslationManager
+type TranslationManager struct {
 	// game id to translator
-	Translators  map[string]*MatchTranslator
-	Stream       chan *riotTypes.Event
-	DamageReturn chan *types.DamageEvent
-	RoundReturn  chan *types.RoundEvent
+	Translators    map[string]*matchTranslator
+	IncomingEvents chan *riotTypes.Event
+	DamageReturn   chan *types.CombatEvent
+	RoundReturn    chan *types.RoundEvent
+	Persistance    *persistance.Persistance
 }
 
-type MatchTranslator struct {
+type matchTranslator struct {
 	EventStream chan *riotTypes.Event
 	Translators map[string]Translatorer
 }
 
-func (m *manager) Start() {
-	for {
-		select {
-		case event := <-m.Stream:
-			if translator, ok := m.Translators[event.Metadata.GameID.Value]; ok {
-				translator.EventStream <- event
-			} else {
-				if event.Configuration != nil {
-					translator := m.newTranslator(event.Configuration)
-					translator.start()
-					m.Translators[event.Metadata.GameID.Value] = translator
-				}
-			}
-		}
+func NewManager(p *persistance.Persistance, d *distributor.Distributor) *TranslationManager {
+	return &TranslationManager{
+		Persistance:    p,
+		Translators:    map[string]*matchTranslator{},
+		DamageReturn:   d.IncDmgEvents,
+		RoundReturn:    d.IncRndEvents,
+		IncomingEvents: make(chan *riotTypes.Event),
 	}
+}
+
+func (m *TranslationManager) Receive(event *riotTypes.Event) {
+	m.IncomingEvents <- event
+}
+
+func (m *TranslationManager) Start() {
+	go func() {
+		for event := range m.IncomingEvents {
+			if _, ok := m.Translators[event.Metadata.GameID.Value]; !ok {
+				m.Translators[event.Metadata.GameID.Value] = m.newTranslator(event.Configuration, event.Metadata.GameID.Value)
+			}
+			m.Translators[event.Metadata.GameID.Value].EventStream <- event
+		}
+
+	}()
 }
 
 // a translator is prepared to translate ONE active game
 // seq1 on each stream has a config
-func (m *manager) newTranslator(cfg *riotTypes.GameConfig) *MatchTranslator {
-	playerMap := make(map[int]string, 10)
-	playerToTeamMap := make(map[int]int, 10)
-	sideStartMap := make(map[int]string, 2)
-
-	for _, player := range cfg.Players {
-		playerMap[player.PlayerID.Value] = player.DisplayName
-	}
-
-	for _, team := range cfg.Teams {
-		for _, player := range team.PlayersInTeam {
-			playerToTeamMap[player.Value] = team.TeamID.Value
-		}
-	}
-
-	sideStartMap[cfg.SpikeMode.AttackingTeam.Value] = "atk"
-	sideStartMap[cfg.SpikeMode.DefendingTeam.Value] = "def"
+func (m *TranslationManager) newTranslator(cfg *riotTypes.GameConfig, ID string) *matchTranslator {
+	playerMap, playerToTeamMap, sideStartMap := cfg.GetMappings()
 	wepMaps := utils.GetWeaponMappings()
-	//abilityMaps := utils.GetAgentAbilityMappings()
 
-	return &MatchTranslator{
+	if err := m.Persistance.StoreGameConfig(cfg, ID); err != nil {
+		panic(err)
+	}
+
+	translator := &matchTranslator{
 		EventStream: make(chan *riotTypes.Event),
 		Translators: m.getTranslators(playerMap, wepMaps, playerToTeamMap, sideStartMap),
 	}
+
+	translator.start()
+	return translator
 }
 
-func (t *MatchTranslator) start() {
-	for {
-		select {
-		case event := <-t.EventStream:
-			for name, translator := range t.Translators {
-				logrus.Infof("%v_handling_event_%v", name, event.Metadata.SequenceNumber)
+func (t *matchTranslator) start() {
+	go func() {
+		for event := range t.EventStream {
+			for _, translator := range t.Translators {
 				translator.HandleEvent(event)
 			}
 		}
-	}
+	}()
 }
 
-func (m *manager) getTranslators(playerMap map[int]string, weapons map[string]string, playerToTeams map[int]int, sideStart map[int]string) map[string]Translatorer {
+func (m *TranslationManager) getTranslators(playerMap map[int]string, weapons map[string]string, playerToTeams map[int]int, sideStart map[int]string) map[string]Translatorer {
 	res := map[string]Translatorer{}
 	res["damage"] = NewDamageTranslator(playerMap, weapons, m.DamageReturn)
 	res["round"] = NewRoundTranslator(m.RoundReturn)

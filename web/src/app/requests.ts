@@ -1,17 +1,18 @@
 const CombatEventTypes = {
-    died: 0,
-    killed: 1,
-    tookDmg: 2,
-    dealtDmg: 3,
+	kill: 0,
+	shot: 1,
 } as const;
 type CombatEvent = (typeof CombatEventTypes)[keyof typeof CombatEventTypes];
 
 type PlayerCombatEvent = {
-    Type: CombatEvent;
-    DetailStr: string;
-    Causer: string;
-    Victim: string;
-    DmgLoc: string;
-    DmgDone: number;
-    SequenceNum: number; 
-}
+	Type: CombatEvent;
+	Causer: string;
+	Victim: string;
+	DmgLoc: string;
+	DmgOnHit: number;
+	RawDmg: number;
+	Wallbang: boolean;
+	DetailStr: string;
+	SequenceNum: number;
+	Weapon: string;
+};

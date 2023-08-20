@@ -7,7 +7,7 @@ import (
 
 const (
 	R_START   = "ROUND_STARTING"
-	R_END     = "ROUND_ENDED"
+	R_END     = "ROUND_ENDING"
 	R_IN      = "IN_ROUND"
 	R_BETWEEN = "BETWEEN_ROUNDS"
 )
@@ -22,7 +22,6 @@ type openRound struct {
 	round *types.RoundData
 	rNum  int
 	phase string
-	seq   int
 }
 
 func NewRoundTranslator(outChan chan<- *types.RoundEvent) *RoundTranslator {
@@ -34,7 +33,7 @@ func NewRoundTranslator(outChan chan<- *types.RoundEvent) *RoundTranslator {
 
 func (t *RoundTranslator) HandleEvent(event *riotTypes.Event) {
 	if event.RoundDecided != nil {
-
+		t.translateRoundDecided(event.RoundDecided)
 	}
 	if event.GamePhase != nil {
 		t.translateGamePhase(event.GamePhase, event.Metadata.SequenceNumber)
@@ -48,7 +47,6 @@ func (t *RoundTranslator) translateRoundDecided(event *riotTypes.RoundDecided) {
 		WinReason:   event.Result.SpikeModeResult.Cause,
 		Winner:      event.Result.WinningTeam.Value,
 	}
-
 }
 
 func (t *RoundTranslator) translateGamePhase(event *riotTypes.GamePhase, seq int) {
