@@ -2,7 +2,6 @@ package translate
 
 import (
 	"github.com/Jordation/jsonl/internal/distributor"
-	"github.com/Jordation/jsonl/internal/persistance"
 	"github.com/Jordation/jsonl/internal/types"
 	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/Jordation/jsonl/utils"
@@ -12,14 +11,13 @@ type Translatorer interface {
 	HandleEvent(event *riotTypes.Event)
 }
 
-// TODO impl TranslationManager
 type TranslationManager struct {
 	// game id to translator
 	Translators    map[string]*matchTranslator
 	IncomingEvents chan *riotTypes.Event
 	DamageReturn   chan *types.CombatEvent
 	RoundReturn    chan *types.RoundEvent
-	Persistance    *persistance.Persistance
+	persistence    *persistence.persistence
 }
 
 type matchTranslator struct {
@@ -27,27 +25,30 @@ type matchTranslator struct {
 	Translators map[string]Translatorer
 }
 
-func NewManager(p *persistance.Persistance, d *distributor.Distributor) *TranslationManager {
-	return &TranslationManager{
-		Persistance:    p,
+func NewManager(p *persistence.persistence, d *distributor.Distributor) *TranslationManager {
+	t := &TranslationManager{
+		persistence:    p,
 		Translators:    map[string]*matchTranslator{},
 		DamageReturn:   d.IncDmgEvents,
 		RoundReturn:    d.IncRndEvents,
 		IncomingEvents: make(chan *riotTypes.Event),
 	}
+	t.start()
+	return t
 }
 
 func (m *TranslationManager) Receive(event *riotTypes.Event) {
 	m.IncomingEvents <- event
 }
 
-func (m *TranslationManager) Start() {
+func (m *TranslationManager) start() {
 	go func() {
 		for event := range m.IncomingEvents {
-			if _, ok := m.Translators[event.Metadata.GameID.Value]; !ok {
+			if _, ok := m.Translators[event.Metadata.GameID.Value]; !ok && event.Configuration != nil {
 				m.Translators[event.Metadata.GameID.Value] = m.newTranslator(event.Configuration, event.Metadata.GameID.Value)
+			} else if ok {
+				m.Translators[event.Metadata.GameID.Value].EventStream <- event
 			}
-			m.Translators[event.Metadata.GameID.Value].EventStream <- event
 		}
 
 	}()
@@ -59,7 +60,7 @@ func (m *TranslationManager) newTranslator(cfg *riotTypes.GameConfig, ID string)
 	playerMap, playerToTeamMap, sideStartMap := cfg.GetMappings()
 	wepMaps := utils.GetWeaponMappings()
 
-	if err := m.Persistance.StoreGameConfig(cfg, ID); err != nil {
+	if err := m.persistence.StoreGameConfig(cfg, ID); err != nil {
 		panic(err)
 	}
 

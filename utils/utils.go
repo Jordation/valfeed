@@ -31,7 +31,7 @@ func GetWeaponMappings() map[string]string {
 	for _, wep := range weps {
 		res[wep.UUID] = wep.WeaponName
 	}
-
+	res[""] = "UNKNOWN_?ABILITIY?_MAYBE"
 	return res
 }
 

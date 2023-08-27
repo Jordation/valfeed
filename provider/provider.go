@@ -5,6 +5,7 @@ import (
 
 	riotTypes "github.com/Jordation/jsonl/provider/types"
 	"github.com/Jordation/jsonl/utils"
+	"github.com/sirupsen/logrus"
 )
 
 type Feed interface {
@@ -34,14 +35,12 @@ func (f *ValFeed) Stream() chan *riotTypes.Event {
 
 func (f *ValFeed) streamEvents(c chan *riotTypes.Event) {
 	for {
-		for i := 0; i < 250; i++ {
-			evt, err := f.Pump.GetDelta()
-			if err != nil {
-				break
-			}
-			c <- evt
+		evt, err := f.Pump.GetDelta()
+		if err != nil {
+			logrus.Info("pump error, probzbly closed", err.Error())
+			time.Sleep(time.Second * 10)
+			return
 		}
-
-		time.Sleep(time.Second)
+		c <- evt
 	}
 }

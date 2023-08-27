@@ -6,6 +6,7 @@ import (
 	"github.com/Jordation/jsonl/internal/persistance"
 	"github.com/Jordation/jsonl/internal/translate"
 	"github.com/Jordation/jsonl/provider"
+	"github.com/sirupsen/logrus"
 )
 
 type App struct {
@@ -36,4 +37,10 @@ func New() (*App, error) {
 		TranslationManager: tm,
 		MergeManager:       mm,
 	}, nil
+}
+
+func (a *App) Start() {
+	a.EventDistributor.BroadcastFeed()
+	a.EventDistributor.BroadcastTranslatedEvents()
+	logrus.Info("starting app")
 }

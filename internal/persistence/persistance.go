@@ -23,7 +23,7 @@ func (p *Persistance) StoreGameConfig(cfg *riotTypes.GameConfig, ID string) erro
 	collection := p.Client.Database("val-feed").Collection("game-configs")
 	if _, err := collection.InsertOne(
 		context.Background(),
-		bson.M{"_id": ID, "config": cfg}); err != nil {
+		bson.M{"_id": ID, "config": cfg}); err != nil && !mongo.IsDuplicateKeyError(err) {
 		return err
 	}
 

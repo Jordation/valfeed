@@ -27,7 +27,7 @@ type CombatEvent struct {
 }
 
 type RoundEvent struct {
-	ID          string
+	GameID      string
 	RoundNumber int
 	SeqInfo     *RoundData
 	Winner      int
@@ -39,10 +39,19 @@ type RoundData struct {
 	Play  int
 	End   int
 }
-type RoundMeta struct {
-	RoundStart int
-	PlayStart  int
-	End        int
+
+type PlayerPositionEvents struct {
+	GameID         string
+	SequenceNumber int
+	Events         []*PlayerPosition
+}
+
+type PlayerPosition struct {
+	PlayerID int
+	GameID   string
+	X        float64
+	Y        float64
+	Z        float64
 }
 
 type MatchState struct {
@@ -50,6 +59,7 @@ type MatchState struct {
 }
 
 type RoundState struct {
+	RoundNum  int
 	Winner    int
 	Finished  bool
 	WinReason string
@@ -59,7 +69,14 @@ type RoundState struct {
 
 type PlayerState struct {
 	ID     int
+	Name   string
+	Team   int
 	Kills  int
 	Died   bool
 	Weapon string
+}
+
+type TranslatedEvent struct {
+	Event any
+	ID    string
 }

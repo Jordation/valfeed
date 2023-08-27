@@ -277,34 +277,6 @@ type ViewVector struct {
 	Z float64 `json:"z,omitempty"`
 }
 
-func (d *Event) GetSnapshot() *Snapshot {
-	if d.Snapshot != nil {
-		return d.Snapshot
-	}
-	return &Snapshot{}
-}
-
-func (s *Snapshot) GetPlayers() []*PlayerInGame {
-	if s.Players != nil {
-		return s.Players
-	}
-	return nil
-}
-
-func (p *PlayerInGame) GetTimeseries() []*Timeseries {
-	if p.Timeseries != nil {
-		return p.Timeseries
-	}
-	return nil
-}
-
-func (p *PlayerInGame) GetPlayerID() *PlayerID {
-	if p.PlayerID != nil {
-		return p.PlayerID
-	}
-	return &PlayerID{}
-}
-
 func (gc *GameConfig) GetMappings() (map[int]string, map[int]int, map[int]string) {
 	playerMap := make(map[int]string, 10)
 	playerToTeamMap := make(map[int]int, 10)

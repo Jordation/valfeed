@@ -1,6 +1,7 @@
 package translate
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/Jordation/jsonl/internal/types"
@@ -26,16 +27,23 @@ func (t *DamageTranslator) HandleEvent(event *riotTypes.Event) {
 		return
 	}
 	if event.DamageEvent.KillEvent {
-		t.handleKillEvent(event.DamageEvent, event.Metadata.SequenceNumber)
-
+		t.handleKillEvent(event.DamageEvent, event.Metadata.SequenceNumber, event.Metadata.GameID.Value)
 	} else {
-		t.handleDamageEvent(event.DamageEvent, event.Metadata.SequenceNumber)
+		t.handleDamageEvent(event.DamageEvent, event.Metadata.SequenceNumber, event.Metadata.GameID.Value)
 	}
 
 }
 
-func (t *DamageTranslator) handleKillEvent(event *riotTypes.DamageEvent, seqNum int) {
+func (t *DamageTranslator) handleKillEvent(event *riotTypes.DamageEvent, seqNum int, ID string) {
+	weapon := ""
+	if event.Weapon == nil {
+		weapon = fmt.Sprintf("UNKNOWN_NO_WEAPON_ON_EVT_%d", seqNum)
+	} else {
+		weapon = t.WeaponMap[strings.ToLower(event.Weapon.Fallback.GUID)]
+	}
+
 	t.OutputQueue <- &types.CombatEvent{
+		ID:          ID,
 		Type:        types.Killed,
 		SequenceNum: seqNum,
 		Causer:      t.PlayerMap[event.CauserID.Value],
@@ -44,12 +52,24 @@ func (t *DamageTranslator) handleKillEvent(event *riotTypes.DamageEvent, seqNum 
 		DmgOnHit:    event.DamageDealt,
 		RawDmg:      event.DamageAmount,
 		Wallbang:    event.WallPen,
-		Weapon:      t.WeaponMap[strings.ToLower(event.Weapon.Fallback.GUID)],
+		Weapon:      weapon,
 	}
 }
 
-func (t *DamageTranslator) handleDamageEvent(event *riotTypes.DamageEvent, seqNum int) {
+func (t *DamageTranslator) handleDamageEvent(event *riotTypes.DamageEvent, seqNum int, ID string) {
+	min := 1.5
+	if event.DamageAmount < min || event.CauserID == nil {
+		return
+	}
+
+	weapon := ""
+	if event.Weapon == nil {
+		weapon = fmt.Sprintf("UNKNOWN_NO_WEAPON_ON_EVT_%d", seqNum)
+	} else {
+		weapon = t.WeaponMap[strings.ToLower(event.Weapon.Fallback.GUID)]
+	}
 	t.OutputQueue <- &types.CombatEvent{
+		ID:          ID,
 		Type:        types.Shot,
 		SequenceNum: seqNum,
 		Causer:      t.PlayerMap[event.CauserID.Value],
@@ -58,7 +78,7 @@ func (t *DamageTranslator) handleDamageEvent(event *riotTypes.DamageEvent, seqNu
 		DmgOnHit:    event.DamageDealt,
 		RawDmg:      event.DamageAmount,
 		Wallbang:    event.WallPen,
-		Weapon:      t.WeaponMap[strings.ToLower(event.Weapon.Fallback.GUID)],
+		Weapon:      weapon,
 	}
 }
 

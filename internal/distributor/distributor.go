@@ -11,40 +11,29 @@ import (
 
 type Distributor struct {
 	RiotEventListeners  map[string]chan *riotTypes.Event
-	TransEventListeners map[string]chan any
+	TransEventListeners map[string]chan *types.TranslatedEvent
 
 	Feed         provider.Feed
 	IncDmgEvents chan *types.CombatEvent
 	IncRndEvents chan *types.RoundEvent
+	// incoming new type of event
 }
 
 func New(feed provider.Feed) *Distributor {
 	return &Distributor{
-		Feed:               feed,
-		RiotEventListeners: map[string]chan *riotTypes.Event{},
-		IncDmgEvents:       make(chan *types.CombatEvent),
-		IncRndEvents:       make(chan *types.RoundEvent),
+		Feed:                feed,
+		RiotEventListeners:  map[string]chan *riotTypes.Event{},
+		TransEventListeners: map[string]chan *types.TranslatedEvent{},
+		IncDmgEvents:        make(chan *types.CombatEvent),
+		IncRndEvents:        make(chan *types.RoundEvent),
 	}
 }
 
-func (d *Distributor) Start() {
-	go func() {
-		time.Sleep(time.Second * 5)
-		close(d.Feed.Stream())
-	}()
-
-	for evt := range d.Feed.Stream() {
-		// Send the message to each listener
-		for lisID, listener := range d.RiotEventListeners {
-			logrus.Tracef("sending a message to %v", lisID)
-			listener <- evt
-		}
-	}
-
-}
-
-func (d *Distributor) AddListener(id string, listener chan *riotTypes.Event) {
+func (d *Distributor) AddRiotEventListener(id string, listener chan *riotTypes.Event) {
 	d.RiotEventListeners[id] = listener
+}
+func (d *Distributor) AddTranslatedEventListener(id string, listener chan *types.TranslatedEvent) {
+	d.TransEventListeners[id] = listener
 }
 
 func (d *Distributor) BroadcastFeed() {
@@ -65,6 +54,7 @@ func (d *Distributor) BroadcastFeed() {
 		}
 	}()
 }
+
 func (d *Distributor) BroadcastTranslatedEvents() {
 	go func() {
 		for {
@@ -79,16 +69,23 @@ func (d *Distributor) BroadcastTranslatedEvents() {
 		for {
 			select {
 			case event := <-d.IncDmgEvents:
-				d.SendTranslatedEvent(event)
+				d.sendTranslatedEvent(&types.TranslatedEvent{
+					Event: event,
+					ID:    event.ID,
+				})
+
 			case event := <-d.IncRndEvents:
-				d.SendTranslatedEvent(event)
+				d.sendTranslatedEvent(&types.TranslatedEvent{
+					Event: event,
+					ID:    event.GameID,
+				})
 			}
 		}
 	}()
 
 }
 
-func (d *Distributor) SendTranslatedEvent(evt any) {
+func (d *Distributor) sendTranslatedEvent(evt *types.TranslatedEvent) {
 	for _, listener := range d.TransEventListeners {
 		listener <- evt
 	}

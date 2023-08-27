@@ -1,13 +1,13 @@
 package types
 
-func (m *RoundMeta) IsInRound(sequence int) bool {
+func (m *RoundData) IsInRound(sequence int) bool {
 	return sequence >= m.RoundStart && sequence <= m.End
 }
 
-func (m *RoundMeta) IsInBuyPhase(sequence int) bool {
+func (m *RoundData) IsInBuyPhase(sequence int) bool {
 	return sequence >= m.RoundStart && sequence < m.PlayStart
 }
 
-func (m *RoundMeta) IsInPlayPhase(sequence int) bool {
+func (m *RoundData) IsInPlayPhase(sequence int) bool {
 	return sequence >= m.PlayStart && sequence <= m.End
 }

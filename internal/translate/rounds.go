@@ -33,15 +33,16 @@ func NewRoundTranslator(outChan chan<- *types.RoundEvent) *RoundTranslator {
 
 func (t *RoundTranslator) HandleEvent(event *riotTypes.Event) {
 	if event.RoundDecided != nil {
-		t.translateRoundDecided(event.RoundDecided)
+		t.translateRoundDecided(event.RoundDecided, event.Metadata.GameID.Value)
 	}
 	if event.GamePhase != nil {
 		t.translateGamePhase(event.GamePhase, event.Metadata.SequenceNumber)
 	}
 }
 
-func (t *RoundTranslator) translateRoundDecided(event *riotTypes.RoundDecided) {
+func (t *RoundTranslator) translateRoundDecided(event *riotTypes.RoundDecided, ID string) {
 	t.OutputQueue <- &types.RoundEvent{
+		GameID:      ID,
 		SeqInfo:     t.OpenRound.round,
 		RoundNumber: t.OpenRound.rNum,
 		WinReason:   event.Result.SpikeModeResult.Cause,
